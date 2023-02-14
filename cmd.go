@@ -43,7 +43,7 @@ var Cmd = &Z.Cmd{
 		"email":   {"var", "set", "email"},
 		"country": {"var", "set", "country"},
 	},
-	Version:     `v0.0.2`,
+	Version:     `v0.0.3`,
 	Source:      `https://github.com/espinosajuanma/hq`,
 	Issues:      `https://github.com/espinosajuanma/hq/issues`,
 	Summary:     `Use HQ slingr app from the console`,
