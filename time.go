@@ -186,7 +186,11 @@ var listTimeTrackingCmd = &Z.Cmd{
 	Summary:     ``,
 	Description: ``,
 	Call: func(x *Z.Cmd, args ...string) error {
-		r, err := app.GetRecords(types.TIME_TRACKING_ENTITY, nil)
+		query := map[string]string{
+			"_sortField": "day",
+			"_sortType":  "desc",
+		}
+		r, err := app.GetRecords(types.TIME_TRACKING_ENTITY, query)
 		if err != nil {
 			return err
 		}
@@ -197,7 +201,6 @@ var listTimeTrackingCmd = &Z.Cmd{
 		}
 		for _, tt := range tts.Items {
 			term.Print(printTimeTracking(&tt))
-			//term.Printf("[%s] %s[%s]%s [%s] %s", v.Project.Label, c, v.Day, term.Reset, d.Weekday().String()[0:3], v.Notes)
 		}
 		return nil
 	},
