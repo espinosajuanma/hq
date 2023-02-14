@@ -94,8 +94,8 @@ var addTimeTrackingCmd = &Z.Cmd{
 		// Select project
 		query = map[string]string{
 			"people.user": userId,
-			// "status":      "development,maintenance",
-			"_fields": "people",
+			"status":      "development,maintenance",
+			"_fields":     "people",
 		}
 		r, err = app.GetRecords(types.FRONTEND_PROJECTS_ENTITY, query)
 		if err != nil {
