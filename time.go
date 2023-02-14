@@ -175,7 +175,7 @@ var addTimeTrackingCmd = &Z.Cmd{
 		if err != nil {
 			return err
 		}
-
+		term.Print(printTimeTracking(&tt))
 		return nil
 	},
 }
@@ -195,13 +195,9 @@ var listTimeTrackingCmd = &Z.Cmd{
 		if err != nil {
 			return err
 		}
-		for _, v := range tts.Items {
-			d, _ := time.Parse("2006-01-02", v.Day)
-			c := term.HGreen
-			if !v.Billable {
-				c = term.HYellow
-			}
-			term.Printf("[%s] %s[%s]%s [%s] %s", v.Project.Label, c, v.Day, term.Reset, d.Weekday().String(), v.Notes)
+		for _, tt := range tts.Items {
+			term.Print(printTimeTracking(&tt))
+			//term.Printf("[%s] %s[%s]%s [%s] %s", v.Project.Label, c, v.Day, term.Reset, d.Weekday().String()[0:3], v.Notes)
 		}
 		return nil
 	},
@@ -269,4 +265,13 @@ var setTimeTrackingDefaultsCmd = &Z.Cmd{
 		}
 		return nil
 	},
+}
+
+func printTimeTracking(t *types.TimeTracking) string {
+	d, _ := time.Parse("2006-01-02", t.Day)
+	c := term.HGreen
+	if !t.Billable {
+		c = term.HYellow
+	}
+	return fmt.Sprintf("[%s] %s[%s]%s [%s] %s", t.Project.Label, c, t.Day, term.Reset, d.Weekday().String()[0:3], t.Notes)
 }
