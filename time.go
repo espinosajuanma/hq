@@ -61,12 +61,34 @@ var addTimeTrackingCmd = &Z.Cmd{
 			return fmt.Errorf("%s, is not a business day", date.Format("2006-01-02"))
 		}
 
-		// Check if today logged more than 8 hours
+		// Check if date is a holiday
+		country, err := x.Root().Get("country")
+		if country == "" {
+			country = "Argentina"
+		}
 		query := map[string]string{
+			"day":     date.Format("2006-01-02"),
+			"country": country,
+		}
+		r, err := app.GetRecords(types.HOLIDAY_ENTITY, query)
+		if err != nil {
+			return err
+		}
+		var holidays types.ManyHolidays
+		err = json.Unmarshal(r, &holidays)
+		if err != nil {
+			return err
+		}
+		if holidays.Total > 0 {
+			return fmt.Errorf("date [%s] is a holiday in [%s]", date.Format("2006-01-02"), country)
+		}
+
+		// Check if date logged more than 8 hours
+		query = map[string]string{
 			"day":     date.Format("2006-01-02"),
 			"_fields": "timeSpent",
 		}
-		r, err := app.GetRecords(types.TIME_TRACKING_ENTITY, query)
+		r, err = app.GetRecords(types.TIME_TRACKING_ENTITY, query)
 		if err != nil {
 			return err
 		}

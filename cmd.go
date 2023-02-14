@@ -40,7 +40,8 @@ var Cmd = &Z.Cmd{
 		vars.Cmd, conf.Cmd,
 	},
 	Shortcuts: Z.ArgMap{
-		"email": {"var", "set", "email"},
+		"email":   {"var", "set", "email"},
+		"country": {"var", "set", "country"},
 	},
 	Version:     `v0.0.2`,
 	Source:      `https://github.com/espinosajuanma/hq`,
