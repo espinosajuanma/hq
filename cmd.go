@@ -42,7 +42,7 @@ var Cmd = &Z.Cmd{
 	Shortcuts: Z.ArgMap{
 		"email": {"var", "set", "email"},
 	},
-	Version:     `v0.0.1`,
+	Version:     `v0.0.2`,
 	Source:      `https://github.com/espinosajuanma/hq`,
 	Issues:      `https://github.com/espinosajuanma/hq/issues`,
 	Summary:     `Use HQ slingr app from the console`,
