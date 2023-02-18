@@ -63,6 +63,9 @@ var addTimeTrackingCmd = &Z.Cmd{
 
 		// Check if date is a holiday
 		country, err := x.Root().Get("country")
+		if err != nil {
+			return err
+		}
 		if country == "" {
 			country = "Argentina"
 		}
@@ -205,8 +208,8 @@ var addTimeTrackingCmd = &Z.Cmd{
 var listTimeTrackingCmd = &Z.Cmd{
 	Name:        `list`,
 	Commands:    []*Z.Cmd{help.Cmd},
-	Summary:     ``,
-	Description: ``,
+	Summary:     `show list of time tracking entries`,
+	Description: `prints a list of last time tracking entries`,
 	Call: func(x *Z.Cmd, args ...string) error {
 		query := map[string]string{
 			"_sortField": "day",

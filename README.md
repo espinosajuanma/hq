@@ -45,6 +45,9 @@ complete -C hq hq
 ### Initial configuration
 
 - `hq email <email>` - Set your email
+	- For login
+- `hq country <country>` - Set your country
+	- To check holidays. Default is `Argentina`
 
 ### Time Tracking
 
@@ -79,6 +82,8 @@ complete -C hq hq
 
 ### Time tracking improvements and Platform Ticket
 
+- [x] Time Tracking avoid log hours on holidays
+	- If date is a holiday it should prevent to log hours
 - [x] Time Tracking avoid log hours on limit
 	- Already hours logged + current shouldn't be more than 8
 - [ ] Time tracking select default project

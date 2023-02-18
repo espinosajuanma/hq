@@ -58,8 +58,8 @@ var Cmd = &Z.Cmd{
 var LoginCmd = &Z.Cmd{
 	Name:        `login`,
 	Commands:    []*Z.Cmd{help.Cmd},
-	Summary:     `Login to the HQ app`,
-	Description: ``,
+	Summary:     `login to the HQ app`,
+	Description: `Authenticate to HQ and generate a token`,
 	Usage:       `<password>`,
 	Call: func(x *Z.Cmd, args ...string) error {
 		email, _ := x.Caller.Get("email")
@@ -98,8 +98,8 @@ var LoginCmd = &Z.Cmd{
 var LogoutCmd = &Z.Cmd{
 	Name:        `logout`,
 	Commands:    []*Z.Cmd{help.Cmd},
-	Summary:     `Logs out the HQ app`,
-	Description: ``,
+	Summary:     `logs out the HQ app`,
+	Description: `expires the current token`,
 	Call: func(x *Z.Cmd, args ...string) error {
 		_, err := app.Logout()
 		if err != nil {
@@ -116,8 +116,8 @@ var LogoutCmd = &Z.Cmd{
 var currentCmd = &Z.Cmd{
 	Name:        `current`,
 	Commands:    []*Z.Cmd{help.Cmd},
-	Summary:     `Get current user information`,
-	Description: ``,
+	Summary:     `get current user information`,
+	Description: `prints the logged user information and app environment`,
 	Call: func(x *Z.Cmd, args ...string) error {
 		term.Printf("App: %s\nEnv: %s", app.Name, string(app.Env))
 		r, err := app.Get("/users/current", nil)
@@ -137,8 +137,8 @@ var currentCmd = &Z.Cmd{
 var aliveCmd = &Z.Cmd{
 	Name:        `alive`,
 	Commands:    []*Z.Cmd{help.Cmd},
-	Summary:     `Keeps token alive making request every 30 minutes`,
-	Description: ``,
+	Summary:     `keeps token alive making request every 30 minutes`,
+	Description: `useful to leave it in the background so people doesn't expires`,
 	Call: func(x *Z.Cmd, args ...string) error {
 		for {
 			term.Printf("Making request to [%s-%s] to keep token alive", app.Name, string(app.Env))
