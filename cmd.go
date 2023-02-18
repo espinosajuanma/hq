@@ -23,6 +23,10 @@ func init() {
 	if token != "" {
 		app.Token = token
 	}
+	test := Z.Vars.Get(".test")
+	if test == "true" {
+		app.Env = S.EnvDev
+	}
 }
 
 var Cmd = &Z.Cmd{
@@ -38,6 +42,7 @@ var Cmd = &Z.Cmd{
 			FeedbackCmd,
 		*/
 		vars.Cmd, conf.Cmd,
+		testCmd,
 	},
 	Shortcuts: Z.ArgMap{
 		"email":   {"var", "set", "email"},
@@ -114,6 +119,7 @@ var currentCmd = &Z.Cmd{
 	Summary:     `Get current user information`,
 	Description: ``,
 	Call: func(x *Z.Cmd, args ...string) error {
+		term.Printf("App: %s\nEnv: %s", app.Name, string(app.Env))
 		r, err := app.Get("/users/current", nil)
 		if err != nil {
 			return err
@@ -123,7 +129,7 @@ var currentCmd = &Z.Cmd{
 		if err != nil {
 			return err
 		}
-		term.Printf("Email: %s\nName: %s\nDeveloper: %t\n", current.Email, current.FullName, current.Permissions.Developer)
+		term.Printf("Email: %s\nName: %s\nDeveloper: %t", current.Email, current.FullName, current.Permissions.Developer)
 		return nil
 	},
 }
@@ -145,7 +151,23 @@ var aliveCmd = &Z.Cmd{
 	},
 }
 
-func checkToken() bool {
-	_, err := app.Get("/users/current", nil)
-	return err == nil
+var testCmd = &Z.Cmd{
+	Name:        `test`,
+	Commands:    []*Z.Cmd{},
+	Summary:     `test in development environment`,
+	Description: `toggles the dev environment. Just for testing.`,
+	Call: func(x *Z.Cmd, _ ...string) error {
+		t, err := x.Root().Get("test")
+		if err != nil {
+			return err
+		}
+		if t == "true" {
+			x.Root().Set("test", "false")
+			term.Printf("Acting as [%s-%s]", app.Name, "prod")
+			return nil
+		}
+		x.Root().Set("test", "true")
+		term.Printf("Acting as [%s-%s]", app.Name, "dev")
+		return nil
+	},
 }
