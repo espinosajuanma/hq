@@ -20,6 +20,8 @@ github.com/espinosajuanma/slingr-go v0.0.1 h1:SkfCYAxYVCheRWi480/XnXoX+7norFph35
 github.com/espinosajuanma/slingr-go v0.0.1/go.mod h1:9MaoXiKTm6FaaXa9gJtGwmDSEcXMf3hM8zkXXzMyIHk=
 github.com/espinosajuanma/slingr-go v0.0.2 h1:adfNUzyth6bCio8WKKQwAbP4aL2/bfhbQgoJJ0F8blw=
 github.com/espinosajuanma/slingr-go v0.0.2/go.mod h1:9MaoXiKTm6FaaXa9gJtGwmDSEcXMf3hM8zkXXzMyIHk=
+github.com/espinosajuanma/slingr-go v0.0.3 h1:hGIHrtr4owu5TYA0KUNGI1qTYDba3cUXhXZmJ7lGJ7I=
+github.com/espinosajuanma/slingr-go v0.0.3/go.mod h1:9MaoXiKTm6FaaXa9gJtGwmDSEcXMf3hM8zkXXzMyIHk=
 github.com/fatih/color v1.10.0/go.mod h1:ELkj/draVOlAH/xkhN6mQ50Qd0MPOk5AAr3maGEBuJM=
 github.com/fatih/color v1.14.1 h1:qfhVLaG5s+nCROl1zJsZRxFeYrHLqWroPOQ8BWiNb4w=
 github.com/fatih/color v1.14.1/go.mod h1:2oHN61fhTpgcxD3TSWCgKDiH1+x4OiDVVGH8WlgGZGg=

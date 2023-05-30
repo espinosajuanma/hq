@@ -3,7 +3,7 @@ module github.com/espinosajuanma/hq
 go 1.18
 
 require (
-	github.com/espinosajuanma/slingr-go v0.0.2
+	github.com/espinosajuanma/slingr-go v0.0.3
 	github.com/gomarkdown/markdown v0.0.0-20221013030248-663e2500819c
 	github.com/rwxrob/bonzai v0.20.10
 	github.com/rwxrob/conf v0.8.2
