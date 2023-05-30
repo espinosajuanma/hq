@@ -86,8 +86,7 @@ complete -C hq hq
 	- If date is a holiday it should prevent to log hours
 - [x] Time Tracking avoid log hours on limit
 	- Already hours logged + current shouldn't be more than 8
-- [ ] Time tracking select default project
-	- If there is more than one project be able to set as default
+- [ ] Time tracking select default project times
 	- [ ] Command `hq time defaults`
 - [ ] Platform Ticket list command: `hq ticket list`
 - [ ] Platform Ticket add command: `hq ticket add`
@@ -100,6 +99,12 @@ complete -C hq hq
 	- Open `$EDITOR`
 	- Prompt confirm and submit ticket
 	- Transform markdown to html and POST ticket
+
+### Credentials configuration
+
+- [ ] Store credentials
+- [ ] Be able to pass credentials by Environment Variables
+- [ ] Be able to pass credentials by file
 
 ### Platform Release command
 
