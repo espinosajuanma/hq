@@ -5,15 +5,15 @@ import S "github.com/espinosajuanma/slingr-go"
 const TIME_TRACKING_ENTITY = "frontendBilling.timeTracking"
 
 type TimeTrackingPayload struct {
-	Project         string   `json:"project"`
-	Person          string   `json:"person"`
-	Day             string   `json:"day"`
-	TimeSpent       int64    `json:"timeSpent"`
-	Service         string   `json:"service"`
-	Sow             string   `json:"sow"`
-	ServiceCategory []string `json:"serviceCategory"`
-	Billable        bool     `json:"billable"`
-	Notes           string   `json:"notes"`
+	Project         GenericRecord `json:"project"`
+	Person          GenericRecord `json:"person"`
+	Day             string        `json:"day"`
+	TimeSpent       int64         `json:"timeSpent"`
+	Service         GenericRecord `json:"service"`
+	Sow             GenericRecord `json:"sow"`
+	ServiceCategory []string      `json:"serviceCategory"`
+	Billable        bool          `json:"billable"`
+	Notes           string        `json:"notes"`
 }
 
 type TimeTracking struct {

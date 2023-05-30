@@ -108,7 +108,7 @@ var addTimeTrackingCmd = &Z.Cmd{
 		d, _ := time.ParseDuration("8h")
 		if sum > d.Milliseconds() {
 			a, _ := time.ParseDuration(fmt.Sprint(sum) + "ms")
-			return fmt.Errorf("you can't log %v hours in a day", a.Hours())
+			return fmt.Errorf("you can't log %v in a day", a.String())
 		}
 
 		userId, err := x.Root().Get("userId")
@@ -187,9 +187,14 @@ var addTimeTrackingCmd = &Z.Cmd{
 			Day:       date.Format("2006-01-02"),
 			Project:   projectId,
 			Person:    userId,
-			Sow:       sowId,
-			Service:   defaultServiceId,
 			Billable:  true,
+		}
+
+		if sowId != "" {
+			payload.Sow = sowId
+		}
+		if defaultServiceId != "" {
+			payload.Service = defaultServiceId
 		}
 		e, err := app.CreateRecord(types.TIME_TRACKING_ENTITY, payload)
 		if err != nil {
@@ -296,10 +301,10 @@ var setTimeTrackingDefaultsCmd = &Z.Cmd{
 }
 
 func printTimeTracking(t *types.TimeTracking) string {
-	d, _ := time.Parse("2006-01-02", t.Day)
+	date, _ := time.Parse("2006-01-02", t.Day)
 	c := term.HGreen
 	if !t.Billable {
 		c = term.HYellow
 	}
-	return fmt.Sprintf("[%s] %s[%s]%s [%s] %s", t.Project.Label, c, t.Day, term.Reset, d.Weekday().String()[0:3], t.Notes)
+	return fmt.Sprintf("[%s] %s[%s]%s [%s] %s", t.Project.Label, c, t.Day, term.Reset, date.Weekday().String()[0:3], t.Notes)
 }
