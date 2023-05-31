@@ -30,9 +30,15 @@ var addTimeTrackingCmd = &Z.Cmd{
 	Aliases:     []string{"create"},
 	Summary:     ``,
 	Description: ``,
-	Usage:       `<note> <duration> <date>`,
+	Usage:       `<note> <duration> <project> <date>`,
 	Call: func(x *Z.Cmd, args ...string) error {
 		var err error
+
+		userId, err := x.Root().Get("userId")
+		if err != nil {
+			return err
+		}
+
 		// Argument 0 - Note
 		note := ""
 		if len(args) >= 1 {
@@ -48,10 +54,38 @@ var addTimeTrackingCmd = &Z.Cmd{
 			}
 		}
 
-		// Argument 3 - Date
-		date := time.Now()
+		// Argument 3 - Project
+		projectId := ""
+		var selectedProject types.FrontendProject
 		if len(args) >= 3 {
-			date, err = time.Parse("2006-01-02", args[2])
+			projectLabel := args[2]
+			if projectLabel != "" {
+				query := map[string]string{
+					"people.user": userId,
+					"name":        projectLabel,
+					"status":      "development,maintenance",
+					"_fields":     "people",
+				}
+				r, err := app.GetRecords(types.FRONTEND_PROJECTS_ENTITY, query)
+				if err != nil {
+					return err
+				}
+				var projects types.ManyFrontendProjects
+				err = json.Unmarshal(r, &projects)
+				if err != nil {
+					return err
+				}
+				if projects.Total > 0 {
+					selectedProject = projects.Items[0]
+					projectId = selectedProject.Id
+				}
+			}
+		}
+
+		// Argument 4 - Date
+		date := time.Now()
+		if len(args) >= 4 {
+			date, err = time.Parse("2006-01-02", args[3])
 			if err != nil {
 				return err
 			}
@@ -111,44 +145,39 @@ var addTimeTrackingCmd = &Z.Cmd{
 			return fmt.Errorf("you can't log %v in a day", a.String())
 		}
 
-		userId, err := x.Root().Get("userId")
-		if err != nil {
-			return err
-		}
-
 		// Select project
-		query = map[string]string{
-			"people.user": userId,
-			"status":      "development,maintenance",
-			"_fields":     "people",
-		}
-		r, err = app.GetRecords(types.FRONTEND_PROJECTS_ENTITY, query)
-		if err != nil {
-			return err
-		}
-		var projects types.ManyFrontendProjects
-		err = json.Unmarshal(r, &projects)
-		if err != nil {
-			return err
-		}
-
-		projectId := ""
-		var selectedProject types.FrontendProject
-		if projects.Total == 0 {
-			return fmt.Errorf("couldn't find any active project for you")
-		} else if projects.Total == 1 {
-			selectedProject = projects.Items[0]
-		} else {
-			term.Print("Select project: ")
-			for i, p := range projects.Items {
-				term.Printf("%v. %s", i+1, p.Label)
+		if projectId == "" {
+			query = map[string]string{
+				"people.user": userId,
+				"status":      "development,maintenance",
+				"_fields":     "people",
 			}
-			i := term.Prompt("Select project: ")
-			cI, err := strconv.Atoi(i)
+			r, err = app.GetRecords(types.FRONTEND_PROJECTS_ENTITY, query)
 			if err != nil {
 				return err
 			}
-			selectedProject = projects.Items[cI-1]
+			var projects types.ManyFrontendProjects
+			err = json.Unmarshal(r, &projects)
+			if err != nil {
+				return err
+			}
+
+			if projects.Total == 0 {
+				return fmt.Errorf("couldn't find any active project for you")
+			} else if projects.Total == 1 {
+				selectedProject = projects.Items[0]
+			} else {
+				term.Print("Select project: ")
+				for i, p := range projects.Items {
+					term.Printf("%v. %s", i+1, p.Label)
+				}
+				i := term.Prompt("Select project: ")
+				cI, err := strconv.Atoi(i)
+				if err != nil {
+					return err
+				}
+				selectedProject = projects.Items[cI-1]
+			}
 		}
 		projectId = selectedProject.Id
 
