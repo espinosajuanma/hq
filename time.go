@@ -121,11 +121,28 @@ var addTimeTrackingCmd = &Z.Cmd{
 		}
 
 		// Check if date logged more than 8 hours
-		query = map[string]string{
-			"day":     date.Format("2006-01-02"),
-			"_fields": "timeSpent",
+		var sum int64 = timeSpent.Milliseconds()
+		aggregate := types.Aggregate{
+			{
+				Match: struct {
+					Day    string `json:"day"`
+					Person string `json:"person"`
+				}{
+					Day:    date.Format("2006-01-02"),
+					Person: userId,
+				},
+			},
+			{
+				Group: struct {
+					By        string `json:"by"`
+					TimeSpent string `json:"timeSpent"`
+				}{
+					By:        "day",
+					TimeSpent: "sum(timeSpent)",
+				},
+			},
 		}
-		r, err = app.GetRecords(types.TIME_TRACKING_ENTITY, query)
+		r, err = app.Aggregate(types.TIME_TRACKING_ENTITY, aggregate)
 		if err != nil {
 			return err
 		}
@@ -134,11 +151,9 @@ var addTimeTrackingCmd = &Z.Cmd{
 		if err != nil {
 			return err
 		}
-		var sum int64 = 0
-		for _, v := range tts.Items {
-			sum += v.TimeSpent
+		if tts.Total >= 1 {
+			sum += tts.Items[0].TimeSpent
 		}
-		sum += timeSpent.Milliseconds()
 		d, _ := time.ParseDuration("8h")
 		if sum > d.Milliseconds() {
 			a, _ := time.ParseDuration(fmt.Sprint(sum) + "ms")
