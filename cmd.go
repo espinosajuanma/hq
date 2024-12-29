@@ -64,7 +64,7 @@ var LoginCmd = &Z.Cmd{
 	Call: func(x *Z.Cmd, args ...string) error {
 		email, _ := x.Caller.Get("email")
 		if email == "" {
-			email := term.Prompt("Email: ")
+			email = term.Prompt("Email: ")
 			if email == "" {
 				return fmt.Errorf("email can't be empty")
 			}
